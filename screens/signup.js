@@ -13,15 +13,49 @@ class SignupScreen extends Component{
         }
     }
 
+    signup = () => {
+        // add further validation for correct email and password length minimum 6 characters
+        let data = { // convert my variables into the format the server expects
+            first_name: this.state.firstName,
+            last_name: this.state.lastName,
+            email: this.state.email,
+            password: this.state.password
+        }
+        return fetch("http://localhost:3333/api/1.0.0/user", {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data) 
+        })
+        .then((response) => {
+            if(response.status === 201){ // successful
+                return response.json()
+            }else if(response.status === 400){ // unsuccessful
+                throw 'Failed validation';
+            }else{
+                throw 'Something went wrong';
+            }
+        })
+        // need to add visual response for user if unsuccessful
+        .then((responseJson) => {
+               console.log("User created with ID: ", responseJson); // printing ID token to console
+               this.props.navigation.navigate("Login"); // once account has been created navigate back to login screen
+        })
+        .catch((error) => {
+            console.log(error); // print error to console 
+        })
+    }
+
     render(){
         return (
             // make app scrollable.
             <ScrollView> 
                 <TextInput
-                    placeholder="Enter your first name..."
-                    onChangeText={(firstName) => this.setState({firstName})}
+                    placeholder="Enter your first name..." // placeholder within text input box
+                    onChangeText={(firstName) => this.setState({firstName})} // assign entered name to relevant state within database
                     value={this.state.firstName}
-                    style={{padding:5, borderWidth:1, margin:5}}
+                    style={{padding:5, borderWidth:1, margin:5}} // styling of text box
                 />
                 <TextInput
                     placeholder="Enter your last name..."
