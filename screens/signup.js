@@ -15,7 +15,7 @@ class SignupScreen extends Component{
 
     render(){
         return (
-            // make app scrollable
+            // make app scrollable.
             <ScrollView> 
                 <TextInput
                     placeholder="Enter your first name..."
