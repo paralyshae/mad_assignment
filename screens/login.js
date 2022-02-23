@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Button} from 'react-native';
+import { Button} from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -26,7 +26,8 @@ class LoginScreen extends Component{
             if(response.status === 200){
                 return response.json()
             }else if(response.status === 400){
-                throw 'Invalid email or password';
+                
+                throw 'Invalid email or password'; // e.g. if you try to submit empty text fields this message will show in console
             }else{
                 throw 'Something went wrong';
             }
@@ -34,9 +35,9 @@ class LoginScreen extends Component{
         .then(async (responseJson) => {
                 console.log(responseJson);
                 await AsyncStorage.setItem('@session_token', responseJson.token);
-                this.props.navigation.navigate("Home");
+                this.props.navigation.navigate("Home"); // if login is successful navigate user to home screen
         })
-        .catch((error) => {
+        .catch((error) => { // error saving data
             console.log(error);
         })
     }
