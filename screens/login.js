@@ -26,7 +26,6 @@ class LoginScreen extends Component{
             if(response.status === 200){
                 return response.json()
             }else if(response.status === 400){
-                
                 throw 'Invalid email or password'; // e.g. if you try to submit empty text fields this message will show in console
             }else{
                 throw 'Something went wrong';

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, Button} from 'react-native';
+import {View, Text, FlatList, Button, Image, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator, Header } from '@react-navigation/bottom-tabs';
 
 import LogoutScreen from './logout';
 import ProfileScreen from './profile';
@@ -31,7 +31,6 @@ class HomeScreen extends Component {
   componentWillUnmount() {
     this.unsubscribe();
   }
-
   // getData = async () => {
   //   const value = await AsyncStorage.getItem('@session_token');
   //   return fetch("http://localhost:3333/api/1.0.0/search", {
@@ -68,7 +67,13 @@ class HomeScreen extends Component {
 
   render(){
     return (
-      <Tab.Navigator>
+      <Tab.Navigator
+      
+      screenOptions={() => ({ // tab icon changes colour when on relevant screen
+        tabBarInactiveTintColor: 'grey',
+        tabBarActiveTintColor: 'tomato',
+      })}>
+
         <Tab.Screen name="MyProfile" component={ProfileScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="FriendRequests" component={FriendRequestScreen} />

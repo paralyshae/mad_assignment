@@ -7,13 +7,12 @@ import LoginScreen from './screens/login';
 import SignupScreen from './screens/signup';
 import HomeScreen from './screens/home';
 
-
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{
+      <Stack.Navigator screenOptions={{ // styling options for stack navigation headers
         headerStyle: {
           backgroundColor: "#2F4F4F",
         },
