@@ -31,9 +31,9 @@ class SignupScreen extends Component {
             .then((response) => {
                 if (response.status === 201) { // successful
                     return response.json()
-                } else if (response.status === 400) { // unsuccessful
+                } else if (response.status === 400) { // bad request
                     throw 'Failed validation';
-                } else {
+                } else { // server error 500
                     throw 'Something went wrong';
                 }
             })
@@ -51,40 +51,37 @@ class SignupScreen extends Component {
         return (
             // make app scrollable.
             <ScrollView >
-            <TextInput placeholder = "Enter your first name..." // placeholder within text input box
-            onChangeText = {
-                (firstName) => this.setState({ firstName }) } // assign entered name to relevant state within database
-            value = { this.state.firstName }
-            style = {
-                { padding: 5, borderWidth: 1, margin: 5 } } // styling of text box
-            /> <
-            TextInput placeholder = "Enter your last name..."
-            onChangeText = {
-                (lastName) => this.setState({ lastName }) }
-            value = { this.state.lastName }
-            style = {
-                { padding: 5, borderWidth: 1, margin: 5 } }
-            /> <
-            TextInput placeholder = "Enter your email..."
-            onChangeText = {
-                (email) => this.setState({ email }) }
-            value = { this.state.email }
-            style = {
-                { padding: 5, borderWidth: 1, margin: 5 } }
-            /> <
-            TextInput placeholder = "Enter your password..."
-            onChangeText = {
-                (password) => this.setState({ password }) }
-            value = { this.state.password }
-            secureTextEntry // hide user input
-            style = {
-                { padding: 5, borderWidth: 1, margin: 5 } }
-            /> <
-            Button title = "Create an account"
-            color = "blue"
-            onPress = {
-                () => this.signup() }
-            /> </ScrollView>
+                <TextInput 
+                    placeholder = "Enter your first name..." // placeholder within text input box
+                    onChangeText = {(firstName) => this.setState({ firstName }) } // assign entered name to relevant state within database
+                    value = { this.state.firstName }
+                    style = {{ padding: 5, borderWidth: 1, margin: 5 } } // styling of text box
+            /> 
+                <TextInput 
+                    placeholder = "Enter your last name..."
+                    onChangeText = {(lastName) => this.setState({ lastName }) }
+                    value = { this.state.lastName }
+                    style = {{ padding: 5, borderWidth: 1, margin: 5 } }
+            /> 
+                <TextInput 
+                    placeholder = "Enter your email..."
+                    onChangeText = {(email) => this.setState({ email }) }
+                    value = { this.state.email }
+                    style = {{ padding: 5, borderWidth: 1, margin: 5 } }
+            /> 
+                <TextInput 
+                    placeholder = "Enter your password..."
+                    onChangeText = {(password) => this.setState({ password }) }
+                    value = { this.state.password }
+                    secureTextEntry // hide user input
+                    style = {{ padding: 5, borderWidth: 1, margin: 5 } }
+            /> 
+                <Button 
+                    title = "Create an account"
+                    color = "blue"
+                    onPress = {() => this.signup() }
+            /> 
+            </ScrollView>
         )
     }
 }
