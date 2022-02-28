@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Button} from 'react-native';
+import { Button, ToastAndroid } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class LoginScreen extends Component{
-    constructor(props){
+class LoginScreen extends Component {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -22,41 +22,41 @@ class LoginScreen extends Component{
             },
             body: JSON.stringify(this.state)
         })
-        .then((response) => {
-            if(response.status === 200){
-                return response.json()
-            }else if(response.status === 400){ // invalid details
-                throw 'Invalid email or password'; // e.g. if you try to submit empty text fields this message will show in console
-            }else{ // server error 500
-                throw 'Something went wrong';
-            }
-        })
-        .then(async (responseJson) => {
+            .then((response) => {
+                if (response.status === 200) {
+                    return response.json()
+                } else if (response.status === 400) { // invalid details
+                    throw 'Invalid email or password'; // e.g. if you try to submit empty text fields this message will show in console
+                } else { // server error 500
+                    throw 'Something went wrong';
+                }
+            })
+            .then(async (responseJson) => {
                 console.log(responseJson);
                 await AsyncStorage.setItem('@session_id', responseJson.id);
                 await AsyncStorage.setItem('@session_token', responseJson.token);
                 this.props.navigation.navigate("Home"); // if login is successful navigate user to home screen
-        })
-        .catch((error) => { // error saving data
-            console.log(error);
-        })
+            })
+            .catch((error) => { // error saving data
+                console.log(error);
+            })
     }
 
-    render(){
+    render() {
         return (
             <ScrollView>
                 <TextInput
                     placeholder="Enter your email..." // placeholder in text box
-                    onChangeText={(email) => this.setState({email})} // assign entered email value to database
+                    onChangeText={(email) => this.setState({ email })} // assign entered email value to database
                     value={this.state.email}
-                    style={{padding:5, borderWidth:1, margin:5}} // styling for text box
+                    style={{ padding: 5, borderWidth: 1, margin: 5 }} // styling for text box
                 />
                 <TextInput
                     placeholder="Enter your password..."
-                    onChangeText={(password) => this.setState({password})}
+                    onChangeText={(password) => this.setState({ password })}
                     value={this.state.password}
                     secureTextEntry // hide user input
-                    style={{padding:5, borderWidth:1, margin:5}}
+                    style={{ padding: 5, borderWidth: 1, margin: 5 }}
                 />
                 <Button // login button
                     title="Login"
@@ -71,7 +71,7 @@ class LoginScreen extends Component{
             </ScrollView>
         )
     }
-    
-  }
 
-  export default LoginScreen;
+}
+
+export default LoginScreen;

@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {View, Text, FlatList, Button, Image, StyleSheet} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, FlatList, Button, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createBottomTabNavigator, Header } from '@react-navigation/bottom-tabs';
 
@@ -11,7 +11,7 @@ import SearchScreen from './search';
 const Tab = createBottomTabNavigator();
 
 class HomeScreen extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -29,22 +29,22 @@ class HomeScreen extends Component {
   componentWillUnmount() {
     this.unsubscribe();
   }
- 
+
   checkLoggedIn = async () => {
     const value = await AsyncStorage.getItem('@session_token');
     if (value == null) {
-        this.props.navigation.navigate('Login');
+      this.props.navigation.navigate('Login');
     }
   };
 
-  render(){
+  render() {
     return (
       <Tab.Navigator
-      
-      screenOptions={() => ({ // tab icon changes colour when on relevant screen
-        tabBarInactiveTintColor: 'grey',
-        tabBarActiveTintColor: 'tomato',
-      })}>
+
+        screenOptions={() => ({ // tab icon changes colour when on relevant screen
+          tabBarInactiveTintColor: 'grey',
+          tabBarActiveTintColor: 'tomato',
+        })}>
 
         <Tab.Screen name="MyProfile" component={ProfileScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
