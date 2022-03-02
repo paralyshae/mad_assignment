@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+//import FriendsScreen from './screens/friends';
+// import CameraScreen from './camera';
+// import updateInformation from './patch';
+
+const Stack = createNativeStackNavigator();
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -78,21 +85,36 @@ class ProfileScreen extends Component {
     this.getUserProfilePhoto();
   }
 
+  // render() {
+  //   <Stack.Navigator screenOptions={{ // styling options for stack navigation headers
+  //     headerStyle: {
+  //       backgroundColor: "#2F4F4F",
+  //     },
+  //     headerTintColor: "white",
+  //     headerBackTitle: "Back",
+  //   }}>
+  //     <Stack.Screen name="Update Infomation" component={updateInformation} />
+  //     <Stack.Screen name="Camera" component={CameraScreen} />
+  //     <Stack.Screen name="Friends" component={FriendsScreen} />
+  //     <Stack.Screen name="Posts" component={PostScreen} />
+  //   </Stack.Navigator>
+  // }
+
   render() {
     if (!this.state.isLoading) {
       return (
-
         <View style={styles.container}>
           <Image
             source={{
               uri: this.state.photo,
             }}
             style={{
-              width: 350,
-              height: 350,
-              borderWidth: 3,
+              width: 200,
+              height: 200,
+              borderWidth: 2,
             }}
           />
+
           <Text>Your name is: {this.state.userData.first_name} {this.state.userData.last_name}</Text>
           <Text>Your email is: {this.state.userData.email}</Text>
           <Text>You have {this.state.userData.friend_count} friends</Text>
@@ -100,13 +122,12 @@ class ProfileScreen extends Component {
           <Button
             title="Update Info"
             color="green"
-          //         onPress={() => this.updateInformation}
+            onPress={() => this.props.navigation.navigate(updateInformation)}
 
           />
           <Button
             title="Update Photo"
             color="green"
-          //         onPress={() => this.updatePhoto}
           />
         </View>
       );
@@ -127,7 +148,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    flexDirection: 'column',
+    padding: 10
   },
 });
 

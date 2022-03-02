@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ToastAndroid } from 'react-native';
+import { Button } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

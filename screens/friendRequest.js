@@ -116,7 +116,6 @@ class FriendRequestScreen extends Component {
                   title="Reject"
                   color="red"
                   onPress={() => this.rejectRequest(item.user_id)}
-                  style = {[styles.container]}
                 />
               </View>
             )}

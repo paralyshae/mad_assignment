@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, Button, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createBottomTabNavigator, Header } from '@react-navigation/bottom-tabs';
 
 import LogoutScreen from './logout';
 import ProfileScreen from './profile';
+import CameraScreen from './camera';
 import FriendRequestScreen from './friendRequest';
 import SearchScreen from './search';
 
@@ -42,11 +42,12 @@ class HomeScreen extends Component {
       <Tab.Navigator
 
         screenOptions={() => ({ // tab icon changes colour when on relevant screen
-          tabBarInactiveTintColor: 'grey',
           tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'black',
         })}>
 
         <Tab.Screen name="MyProfile" component={ProfileScreen} />
+        <Tab.Screen name="Camera" component={CameraScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="FriendRequests" component={FriendRequestScreen} />
         <Tab.Screen name="Logout" component={LogoutScreen} />
