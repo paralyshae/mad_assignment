@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, Image, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class ProfileScreen extends Component {
@@ -70,6 +70,10 @@ class ProfileScreen extends Component {
   }
 
   componentDidMount() {
+    this.props.navigation.addListener('focus', () => {
+      this.getUserData();
+      this.getUserProfilePhoto();
+    })
     this.getUserData();
     this.getUserProfilePhoto();
   }
@@ -77,6 +81,7 @@ class ProfileScreen extends Component {
   render() {
     if (!this.state.isLoading) {
       return (
+
         <View style={styles.container}>
           <Image
             source={{
@@ -91,11 +96,23 @@ class ProfileScreen extends Component {
           <Text>Your name is: {this.state.userData.first_name} {this.state.userData.last_name}</Text>
           <Text>Your email is: {this.state.userData.email}</Text>
           <Text>You have {this.state.userData.friend_count} friends</Text>
+
+          <Button
+            title="Update Info"
+            color="green"
+          //         onPress={() => this.updateInformation}
+
+          />
+          <Button
+            title="Update Photo"
+            color="green"
+          //         onPress={() => this.updatePhoto}
+          />
         </View>
       );
     } else {
       return (
-        <View>
+        <View style={[styles.container, styles.horizontal]}>
           <ActivityIndicator
             size="large"
             color="#00ff00"

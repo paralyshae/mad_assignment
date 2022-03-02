@@ -1,5 +1,5 @@
-import React, { Component, useReducer } from 'react';
-import { View, Text, FlatList, ScrollView, Button, ActivityIndicator } from 'react-native';
+import React, { Component } from 'react';
+import { View, Text, FlatList, ScrollView, Button, ActivityIndicator, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class FriendRequestScreen extends Component {
@@ -13,11 +13,13 @@ class FriendRequestScreen extends Component {
   }
 
   componentDidMount() {
+    this.props.navigation.addListener('focus', () => {
+      this.getFriendRequestData();
+    })
     this.getFriendRequestData();
   }
 
   getFriendRequestData = async () => {
-    const id = await AsyncStorage.getItem('@session_id');
     const value = await AsyncStorage.getItem('@session_token');
     return fetch("http://localhost:3333/api/1.0.0/friendrequests", {
       method: 'get',
@@ -37,7 +39,7 @@ class FriendRequestScreen extends Component {
       .then((responseJson) => {
         this.setState({
           isLoading: false,
-          userData: responseJson
+          friendRequestData: responseJson
         })
       })
       .catch((error) => {
@@ -46,14 +48,20 @@ class FriendRequestScreen extends Component {
   }
 
   acceptRequest = async (id) => {
-    return fetch("http://localhost:3333/api/1.0.0/friendrequests" + id, {
-      method: 'post'
+    const value = await AsyncStorage.getItem('@session_token');
+    return fetch("http://localhost:3333/api/1.0.0/friendrequests/" + id, {
+      method: 'post',
+      headers: {
+        'X-Authorization': value
+      }
     })
-      .then(() => {
-        this.getFriendRequestData();
-      })
-      .then(() => {
-        console.log("Request Accepted")
+      .then((response) => {
+        if(response.status === 200){
+          console.log("Request Accepted")
+          this.getFriendRequestData();
+        }else{
+          throw "shit gone wrong"
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -61,14 +69,20 @@ class FriendRequestScreen extends Component {
   }
 
   rejectRequest = async (id) => {
-    return fetch("http://localhost:3333/api/1.0.0/friendrequests" + id, {
-      method: 'delete'
+    const value = await AsyncStorage.getItem('@session_token');
+    return fetch("http://localhost:3333/api/1.0.0/friendrequests/" + id, {
+      method: 'delete',
+      headers: {
+        'X-Authorization': value
+      }
     })
-      .then(() => {
-        this.getFriendRequestData();
-      })
-      .then(() => {
-        console.log("Request Rejected")
+      .then((response) => {
+        if(response.status === 200){
+          console.log("Request Rejected - I don't want no friends")
+          this.getFriendRequestData();
+        }else{
+          throw "shit gone wrong"
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -78,7 +92,7 @@ class FriendRequestScreen extends Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <View>
+        <View style={[styles.container, styles.horizontal]}>
           <ActivityIndicator
             size="large"
             color="#00ff00"
@@ -90,27 +104,40 @@ class FriendRequestScreen extends Component {
         <ScrollView>
           <FlatList
             data={this.state.friendRequestData}
-            renderRequests={(userData) => (
+            renderItem={({item}) => (
               <View>
-                <Text>{this.state.friendRequestData}</Text>
+                <Text>{item.first_name}</Text>
                 <Button
                   title="Accept"
                   color="green"
-                  onPress={() => this.acceptRequest(userData.id)}
+                  onPress={() => this.acceptRequest(item.user_id)}
                 />
                 <Button
                   title="Reject"
                   color="red"
-                  onPress={() => this.rejectRequest(userData.id)}
+                  onPress={() => this.rejectRequest(item.user_id)}
+                  style = {[styles.container]}
                 />
               </View>
             )}
-            keyExtractor={(item, index) => this.userData.toString()}
+            keyExtractor={(item) => item.user_id.toString()}
           />
         </ScrollView>
       );
     }
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  horizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10
+  }
+});
 
 export default FriendRequestScreen;

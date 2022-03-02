@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, TextInput, Button, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TextInput, Button, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class SearchScreen extends Component {
@@ -8,7 +8,8 @@ class SearchScreen extends Component {
 
         this.state = {
             isLoading: true,
-            getSearchData: []
+            searchList: [],
+            query: ""
         }
     }
 
@@ -18,7 +19,7 @@ class SearchScreen extends Component {
 
     getSearchData = async () => {
         const value = await AsyncStorage.getItem('@session_token');
-        return fetch("http://localhost:3333/api/1.0.0/search", {
+        return fetch("http://localhost:3333/api/1.0.0/search?q=" + this.state.query, {
             method: 'get',
             'headers': {
                 'X-Authorization': value
@@ -36,7 +37,7 @@ class SearchScreen extends Component {
             .then((responseJson) => {
                 this.setState({
                     isLoading: false,
-                    getSearchData: responseJson
+                    searchList: responseJson
                 })
             })
             .catch((error) => {
@@ -51,11 +52,10 @@ class SearchScreen extends Component {
         }
     };
 
-
     render() {
         if (this.state.isLoading) {
             return (
-                <View>
+                <View style={[styles.container, styles.horizontal]}>
                     <ActivityIndicator
                         size="large"
                         color="#00ff00"
@@ -67,22 +67,42 @@ class SearchScreen extends Component {
                 <ScrollView>
                     <View>
                         <TextInput
-                            placeholder="Search a user..." // placeholder in text box
-                            style={{ padding: 5, borderWidth: 1, margin: 5 }} // styling for text box
+                            placeholder="Search a user..."
+                            onChangeText={(query) => this.setState({ query })}
+                            value={this.state.query}
+                            style={{ padding: 5, borderWidth: 1, margin: 5 }}
                         />
                     </View>
-                    <Button // button to navigate to sign up screen
+                    <Button
                         title="Search"
                         color="green"
-                        onPress={() => this.props.navigation.navigate("Search")}
+                        onPress={() => this.getSearchData()}
                     />
-                    )
+                    <FlatList
+                        data={this.state.searchList}
+                        renderItem={({ item }) => (
+                            <View>
+                                <Text> {item.user_givenname} {item.user_familyname}</Text>
+                            </View>
+                        )}
+                        keyExtractor={(item) => item.user_id.toString()}
+                    />
                 </ScrollView>
-            )
+            );
         }
-
-
     }
 }
 
-export default SearchScreen;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center"
+    },
+    horizontal: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        padding: 10
+    }
+});
+
+export default SearchScreen; 

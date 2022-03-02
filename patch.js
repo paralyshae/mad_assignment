@@ -104,7 +104,8 @@ class UpdateUserData extends Component{
             />
             <Button
               title="Update Information"
-              onPress={() => this.updateInformation()}
+//            onPress={() => this.props.navigation.navigate("")}
+//            onPress={() => this.updateInformation}
             />
           </View>
       );
@@ -112,4 +113,4 @@ class UpdateUserData extends Component{
 }
 
 
-export default App;
+export default UpdateUserData;
