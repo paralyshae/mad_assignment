@@ -82,7 +82,17 @@ class SearchScreen extends Component {
                         data={this.state.searchList}
                         renderItem={({ item }) => (
                             <View>
-                                <Text> {item.user_givenname} {item.user_familyname}</Text>
+                                <Text> {item.user_givenname} {item.user_familyname}
+                                    <Button
+                                        title="View"
+                                        color="green"
+                                        onPress={() => this.props.navigation.navigate('Profile', { user_id: item.user_id })}
+                                    />
+                                    <Button
+                                        title="Add"
+                                        color="green"
+                                    />
+                                </Text>
                             </View>
                         )}
                         keyExtractor={(item) => item.user_id.toString()}
@@ -93,6 +103,8 @@ class SearchScreen extends Component {
     }
 }
 
+export default SearchScreen;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -102,7 +114,5 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         padding: 10
-    }
+    },
 });
-
-export default SearchScreen; 

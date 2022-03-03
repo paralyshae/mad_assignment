@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, Button, TextInput } from 'react-native';
+import { View, Button, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class UpdateUserData extends Component {
   constructor(props) {
@@ -9,45 +10,87 @@ class UpdateUserData extends Component {
       originalFirstName: '',
       originalLastName: '',
       originalEmail: '',
-      originalPassword: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+
     };
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+    const id = await AsyncStorage.getItem('@session_id');
+    const token = await AsyncStorage.getItem('@session_token');
+
+    return fetch("http://localhost:3333/api/1.0.0/user/" + id, {
+      method: 'get',
+      headers: {
+        'content-type': 'application/json',
+        "X-Authorization": token
+      },
+
+    })
+
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 400) { // bad request
+          throw 'Bad Request 400';
+        } else if (response.status === 401) { // unauthorised
+          throw 'Unauthorised 401';
+        } else if (response.status === 403) { // forbidden
+          throw 'Forbidden 403';
+        } else if (response.status === 404) { // not found
+          throw 'Not Found 404';
+        } else { // server error 500
+          throw 'Something went wrong';
+        }
+      })
+      .then((responseJson) => {
+        this.setState({
+          originalFirstName: responseJson.first_name,
+          originalLastName: responseJson.last_name,
+          originalEmail: responseJson.email,
+          firstName: responseJson.first_name,
+          lastName: responseJson.last_name,
+          email: responseJson.email,
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   updateInformation = async () => {
 
     const id = await AsyncStorage.getItem('@session_id');
-
-    // let data = { // convert my variables into the format the server expects
-    //   first_name: this.state.originalFirstName,
-    //   last_name: this.state.originalLastName,
-    //   email: this.state.originalEmail,
-    //   password: this.state.originalPassword
-    // }
+    const token = await AsyncStorage.getItem('@session_token');
 
     let toSend = {};
 
     if (this.state.firstName != this.state.originalFirstName) {
-      toSend['firstName'] = this.state.firstName;
+      toSend['first_name'] = this.state.firstName;
     }
 
-    if (this.state.description != this.state.originalLastName) {
-      toSend['lastName'] = this.state.lastName;
+    if (this.state.lastName != this.state.originalLastName) {
+      toSend['last_name'] = this.state.lastName;
     }
 
-    if (this.state.unit_price != this.state.originalEmail) {
-      toSend['email'] = parseInt(this.state.email);
+    if (this.state.email != this.state.originalEmail) {
+      toSend['email'] = (this.state.email);
     }
 
-    if (this.state.quantity != this.state.originalPassword) {
-      toSend['password'] = parseInt(this.state.password);
-    }
 
     console.log(JSON.stringify(toSend));
 
     return fetch("http://localhost:3333/api/1.0.0/user/" + id, {
-      method: 'patch',
+      method: 'PATCH',
       headers: {
-        'content-type': 'application/json'
+        'content-type': 'application/json',
+        "X-Authorization": token
       },
       body: JSON.stringify(toSend)
     })
@@ -78,11 +121,10 @@ class UpdateUserData extends Component {
   render() {
     return (
       <View>
-        <Text>Update Details</Text>
-
         <TextInput
           placeholder="Enter your first name..."
           onChangeText={(firstName) => this.setState({ firstName })}
+          value={this.state.firstName}
           style={{ padding: 5, borderWidth: 1, margin: 5 }}
         />
         <TextInput
@@ -93,20 +135,13 @@ class UpdateUserData extends Component {
         />
         <TextInput
           placeholder="Enter your email address..."
-          onChangeText={(email) => this.setState({ email })} // assign entered name to relevant state within database
+          onChangeText={(email) => this.setState({ email })}
           value={this.state.email}
           style={{ padding: 5, borderWidth: 1, margin: 5 }}
         />
-        <TextInput
-          placeholder="Enter your password..."
-          onChangeText={(password) => this.setState({ password })} // assign entered name to relevant state within database
-          value={this.state.password}
-          secureTextEntry
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
-        />
         <Button
-          title="Update Information"
-        //         onPress={() => this.props.navigation.navigate("")}
+          title="Update Details"
+          onPress={() => { this.updateInformation(); }}
         />
       </View>
     );

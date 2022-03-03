@@ -56,11 +56,11 @@ class FriendRequestScreen extends Component {
       }
     })
       .then((response) => {
-        if(response.status === 200){
+        if (response.status === 200) {
           console.log("Request Accepted")
           this.getFriendRequestData();
-        }else{
-          throw "shit gone wrong"
+        } else {
+          throw "Something has gone wrong"
         }
       })
       .catch((err) => {
@@ -77,11 +77,11 @@ class FriendRequestScreen extends Component {
       }
     })
       .then((response) => {
-        if(response.status === 200){
+        if (response.status === 200) {
           console.log("Request Rejected - I don't want no friends")
           this.getFriendRequestData();
-        }else{
-          throw "shit gone wrong"
+        } else {
+          throw "Something has gone wrong"
         }
       })
       .catch((err) => {
@@ -98,13 +98,15 @@ class FriendRequestScreen extends Component {
             color="#00ff00"
           />
         </View>
-      );
+      )
+    } else if (this.state.friendRequestData.length == 0) {
+      return <Text> No new friend requests </Text>
     } else {
       return (
         <ScrollView>
           <FlatList
             data={this.state.friendRequestData}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <View>
                 <Text>{item.first_name}</Text>
                 <Button
@@ -127,6 +129,8 @@ class FriendRequestScreen extends Component {
   }
 }
 
+export default FriendRequestScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -138,5 +142,3 @@ const styles = StyleSheet.create({
     padding: 10
   }
 });
-
-export default FriendRequestScreen;

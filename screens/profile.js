@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-//import FriendsScreen from './screens/friends';
-// import CameraScreen from './camera';
-// import updateInformation from './patch';
-
-const Stack = createNativeStackNavigator();
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -62,7 +55,6 @@ class ProfileScreen extends Component {
           throw 'Not found';
         } else {
           throw 'Something went wrong'; // 500 server error
-
         }
       })
       .then((responseJson) => {
@@ -84,21 +76,6 @@ class ProfileScreen extends Component {
     this.getUserData();
     this.getUserProfilePhoto();
   }
-
-  // render() {
-  //   <Stack.Navigator screenOptions={{ // styling options for stack navigation headers
-  //     headerStyle: {
-  //       backgroundColor: "#2F4F4F",
-  //     },
-  //     headerTintColor: "white",
-  //     headerBackTitle: "Back",
-  //   }}>
-  //     <Stack.Screen name="Update Infomation" component={updateInformation} />
-  //     <Stack.Screen name="Camera" component={CameraScreen} />
-  //     <Stack.Screen name="Friends" component={FriendsScreen} />
-  //     <Stack.Screen name="Posts" component={PostScreen} />
-  //   </Stack.Navigator>
-  // }
 
   render() {
     if (!this.state.isLoading) {
@@ -122,12 +99,22 @@ class ProfileScreen extends Component {
           <Button
             title="Update Info"
             color="green"
-            onPress={() => this.props.navigation.navigate(updateInformation)}
-
+            onPress={() => this.props.navigation.navigate("Update")}
+          />
+          <Button
+            title="View Friends"
+            color="green"
+            onPress={() => this.props.navigation.navigate("Friends")}
           />
           <Button
             title="Update Photo"
             color="green"
+            onPress={() => this.props.navigation.navigate("Camera")}
+          />
+          <Button
+            title="Post"
+            color="green"
+            onPress={() => this.props.navigation.navigate("Posts")}
           />
         </View>
       );
@@ -143,6 +130,8 @@ class ProfileScreen extends Component {
   }
 }
 
+export default ProfileScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -153,5 +142,3 @@ const styles = StyleSheet.create({
     padding: 10
   },
 });
-
-export default ProfileScreen;

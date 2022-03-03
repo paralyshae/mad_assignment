@@ -19,8 +19,8 @@ class CameraScreen extends Component {
   }
 
   sendToServer = async (data) => {
-    let id = await AsyncStorage.getItem('@session_id');
-    let token = await AsyncStorage.getItem('@session_token');
+    const id = await AsyncStorage.getItem('@session_id');
+    const token = await AsyncStorage.getItem('@session_token');
 
     let res = await fetch(data.base64);
     let blob = await res.blob();
@@ -64,9 +64,7 @@ class CameraScreen extends Component {
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => {
-                  this.takePicture();
-                }}>
+                onPress={() => { this.takePicture(); }}>
                 <Text style={styles.text}> Take Photo </Text>
               </TouchableOpacity>
             </View>
@@ -102,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    flex:1,
+    flex: 1,
     fontSize: 18,
     color: 'white',
     textAlign: 'center'
