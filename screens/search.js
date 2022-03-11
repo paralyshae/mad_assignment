@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable no-console */
-/* eslint-disable no-throw-literal */
 /* eslint-disable consistent-return */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
@@ -40,7 +39,7 @@ class SearchScreen extends Component {
         } if (response.status === 401) {
           this.props.navigation.navigate('Login');
         } else {
-          throw 'Something went wrong';
+          throw new Error('Something went wrong');
         }
       })
       .then((responseJson) => {
@@ -78,11 +77,11 @@ class SearchScreen extends Component {
         } else if (response.status === 403) {
           console.log('User is already added as a friend');
         } else if (response.status === 404) {
-          throw 'Not found';
+          throw new Error('Not found');
         } else if (response.status === 500) {
-          throw 'Server Error';
+          throw new Error('Server Error');
         } else {
-          throw 'Something went wrong';
+          throw new Error('Something went wrong');
         }
       })
       .catch((error) => {

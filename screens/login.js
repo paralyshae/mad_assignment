@@ -1,12 +1,16 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-alert */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable no-throw-literal */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
-import { Button } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import {
+  Button, TextInput, StyleSheet,
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class LoginScreen extends Component {
@@ -37,9 +41,9 @@ class LoginScreen extends Component {
       } if (response.status === 400) { // invalid details
         this.setState({ validation: 'Invalid email or password' });
         alert('Invalid email or password');
-        throw 'Invalid email or password'; // e.g. if you try to submit empty text fields this message will show in console
+        throw new Error('Invalid email or password'); // e.g. if you try to submit empty text fields this message will show in console
       } else { // server error 500
-        throw 'Something went wrong';
+        throw new Error('Something went wrong');
       }
     })
     .then(async (responseJson) => {
@@ -59,14 +63,14 @@ class LoginScreen extends Component {
           placeholder="Enter your email..." // placeholder in text box
           onChangeText={(email) => this.setState({ email })}
           value={this.state.email}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <TextInput
           placeholder="Enter your password..."
           onChangeText={(password) => this.setState({ password })}
           value={this.state.password}
           secureTextEntry // hide user input
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <Button // login button
           title="Login"
@@ -79,8 +83,17 @@ class LoginScreen extends Component {
           onPress={() => this.props.navigation.navigate('Signup')}
         />
       </ScrollView>
+
     );
   }
 }
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  text: {
+    padding: 5,
+    borderWidth: 2,
+    margin: 5,
+  },
+});

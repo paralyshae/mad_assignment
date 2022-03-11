@@ -1,10 +1,12 @@
-/* eslint-disable no-throw-literal */
+/* eslint-disable no-use-before-define */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
-import { Text, ScrollView, Button } from 'react-native';
+import {
+  Text, ScrollView, Button, StyleSheet,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class LogoutScreen extends Component {
@@ -23,7 +25,7 @@ class LogoutScreen extends Component {
         } else if (response.status === 401) { // unauthorised
           this.props.navigation.navigate('Login');
         } else { // server error 500
-          throw 'Something went wrong';
+          throw new Error('Something went wrong');
         }
       })
       .catch((error) => {
@@ -34,10 +36,7 @@ class LogoutScreen extends Component {
   render() {
     return ( // render buttons for user to logout of account
       <ScrollView>
-        <Text style={{
-          fontSize: 18, fontWeight: 'bold', padding: 5, margin: 5,
-        }}
-        >
+        <Text style={styles.text}>
           Are you sure?
         </Text>
         <Button
@@ -56,3 +55,12 @@ class LogoutScreen extends Component {
 }
 
 export default LogoutScreen;
+
+const styles = StyleSheet.create({
+  text: {
+    padding: 5,
+    fontSize: 18,
+    fontWeight: 'bold',
+    margin: 5,
+  },
+});

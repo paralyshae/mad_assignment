@@ -1,6 +1,5 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-console */
-/* eslint-disable no-throw-literal */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-useless-constructor */
@@ -41,13 +40,13 @@ class PostScreen extends Component {
           Alert.alert('Post added');
           this.props.navigation.navigate('Profile');
         } else if (response.status === 401) {
-          throw 'Unauthorised';
+          throw new Error('Unauthorised');
         } else if (response.status === 404) {
-          throw 'Not Found';
+          throw new Error('Not Found');
         } else if (response.status === 500) {
-          throw 'Server Error';
+          throw new Error('Server Error');
         } else {
-          throw 'Something went wrong';
+          throw new Error('Something went wrong');
         }
       })
       .catch((error) => {

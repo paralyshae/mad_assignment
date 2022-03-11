@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-/* eslint-disable no-throw-literal */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-filename-extension */
@@ -42,7 +41,7 @@ class FriendRequestScreen extends Component {
         } if (response.status === 401) { // unauthorised / not logged in
           this.props.navigation.navigate('Login');
         } else {
-          throw 'Something went wrong'; // 500 server error
+          throw new Error('Something went wrong'); // 500 server error
         }
       })
       .then((responseJson) => {
@@ -69,7 +68,7 @@ class FriendRequestScreen extends Component {
           console.log('Request Accepted');
           this.getFriendRequestData();
         } else {
-          throw 'Something has gone wrong';
+          throw new Error('Something has gone wrong');
         }
       })
       .catch((err) => {
@@ -90,7 +89,7 @@ class FriendRequestScreen extends Component {
           console.log("Request Rejected - I don't want no friends");
           this.getFriendRequestData();
         } else {
-          throw 'Something has gone wrong';
+          throw new Error('Something has gone wrong');
         }
       })
       .catch((err) => {

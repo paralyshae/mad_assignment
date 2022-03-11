@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable camelcase */
 /* eslint-disable consistent-return */
-/* eslint-disable no-throw-literal */
-/* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
@@ -24,21 +23,20 @@ class UserProfileScreen extends Component {
   }
 
   componentDidMount() {
+    let { profile_id } = this.props.route.params;
     this.props.navigation.addListener('focus', () => {
       this.getUserData();
       this.getUserProfilePhoto();
-      this.getUserProfile();
-      // let {user_id} = this.props.route.params;
     });
     this.getUserData();
     this.getUserProfilePhoto();
-    this.getUserProfile();
   }
 
   getUserProfilePhoto = async () => {
-    const id = await AsyncStorage.getItem('@userID');
+    // const id = await AsyncStorage.getItem('@userID');
+    const { profile_id } = this.props.route.params;
     const token = await AsyncStorage.getItem('@session_token');
-    fetch(`http://localhost:3333/api/1.0.0/user/${id}/photo`, {
+    return fetch(`http://localhost:3333/api/1.0.0/user/${profile_id}/photo`, {
       method: 'get',
       headers: {
         'X-Authorization': token,
@@ -52,15 +50,16 @@ class UserProfileScreen extends Component {
           isLoading: false,
         });
       })
-      .catch((err) => {
-        console.log('error', err);
+      .catch((error) => {
+        console.log('error', error);
       });
   };
 
   getUserData = async () => {
-    const id = await AsyncStorage.getItem('@userID');
+    const { profile_id } = this.props.route.params;
+    // const id = await AsyncStorage.getItem('@userID');
     const token = await AsyncStorage.getItem('@session_token');
-    return fetch(`http://localhost:3333/api/1.0.0/user/${id}`, {
+    return fetch(`http://localhost:3333/api/1.0.0/user/${profile_id}`, {
       method: 'get',
       headers: {
         'X-Authorization': token,
@@ -72,9 +71,9 @@ class UserProfileScreen extends Component {
         } if (response.status === 401) { // unauthorised / not logged in
           this.props.navigation.navigate('Login');
         } else if (response.status === 404) {
-          throw 'Not found';
+          throw new Error('Not found');
         } else {
-          throw 'Something went wrong'; // 500 server error
+          throw new Error('Something went wrong'); // 500 server error
         }
       })
       .then((responseJson) => {
@@ -88,10 +87,10 @@ class UserProfileScreen extends Component {
       });
   };
 
-  getUserProfile = async () => {
-    await AsyncStorage.setItem(this.user_id);
-    this.props.navigation.navigate('UserProfile');
-  };
+  // getUserProfile = async () => {
+  //   await AsyncStorage.setItem(this.user_id);
+  //   this.props.navigation.navigate('UserProfile');
+  // };
 
   render() {
     if (!this.state.isLoading) {
@@ -155,6 +154,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     flexDirection: 'column',
+    padding: 10,
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     padding: 10,
   },
 });

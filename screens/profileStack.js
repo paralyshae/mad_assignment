@@ -7,11 +7,11 @@ import React, { Component } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import ProfileScreen from './profile';
-import CameraScreen from './camera';
-import UpdateUserData from './patch';
-import FriendsScreen from './friends';
-import PostScreen from './post';
 import UserProfileScreen from './user.js';
+import CameraScreen from './camera';
+import FriendsScreen from './friends';
+import UpdateUserData from './patch';
+import PostScreen from './post';
 
 const ProfStack = createNativeStackNavigator();
 

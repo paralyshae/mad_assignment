@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable no-throw-literal */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-console */
@@ -44,11 +43,11 @@ class FriendsScreen extends Component {
         } if (response.status === 401) {
           return this.props.navigation.navigate('Login');
         } if (response.status === 403) {
-          throw 'Can only view the friends of yourself or your friends';
+          throw new Error('Can only view the friends of yourself or your friends');
         } else if (response.status === 404) {
-          throw 'Not Found';
+          throw new Error('Not Found');
         } else { // 500
-          throw 'Something went wrong';
+          throw new Error('Something went wrong');
         }
       })
       .then((responseJson) => {

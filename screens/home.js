@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable react/prop-types */
@@ -61,6 +62,7 @@ class HomeScreen extends Component {
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
+
         })}
       >
 

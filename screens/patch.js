@@ -1,12 +1,14 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-throw-literal */
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
-import { View, TextInput, Button } from 'react-native';
+import {
+  View, TextInput, Button, StyleSheet,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { IonButton, IonIcon, IonContent } from '@ionic/react';
-// import { pencil } from 'ionicons/icons';
+import { IonButton, IonIcon } from '@ionic/react';
+import { pencil } from 'ionicons/icons';
 
 class UpdateUserData extends Component {
   constructor(props) {
@@ -44,15 +46,15 @@ class UpdateUserData extends Component {
         if (response.status === 200) {
           return response.json();
         } if (response.status === 400) { // bad request
-          throw 'Bad Request 400';
+          throw new Error('Bad Request 400');
         } else if (response.status === 401) { // unauthorised
-          throw 'Unauthorised 401';
+          throw new Error('Unauthorised 401');
         } else if (response.status === 403) { // forbidden
-          throw 'Forbidden 403';
+          throw new Error('Forbidden 403');
         } else if (response.status === 404) { // not found
-          throw 'Not Found 404';
+          throw new Error('Not Found 404');
         } else { // server error 500
-          throw 'Something went wrong';
+          throw new Error('Something went wrong');
         }
       })
       .then((responseJson) => {
@@ -103,15 +105,15 @@ class UpdateUserData extends Component {
         if (response.status === 200) {
           console.log('Details updated');
         } else if (response.status === 400) { // bad request
-          throw 'Bad Request 400';
+          throw new Error('Bad Request 400');
         } else if (response.status === 401) { // unauthorised
-          throw 'Unauthorised 401';
+          throw new Error('Unauthorised 401');
         } else if (response.status === 403) { // forbidden
-          throw 'Forbidden 403';
+          throw new Error('Forbidden 403');
         } else if (response.status === 404) { // not found
-          throw 'Not Found 404';
+          throw new Error('Not Found 404');
         } else { // server error 500
-          throw 'Something went wrong';
+          throw new Error('Something went wrong');
         }
       })
       .then(() => {
@@ -129,30 +131,38 @@ class UpdateUserData extends Component {
           placeholder="Enter your first name..."
           onChangeText={(firstName) => this.setState({ firstName })}
           value={this.state.firstName}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <TextInput
           placeholder="Enter your last name..."
           onChangeText={(lastName) => this.setState({ lastName })}
           value={this.state.lastName}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <TextInput
           placeholder="Enter your email address..."
           onChangeText={(email) => this.setState({ email })}
           value={this.state.email}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <Button
           title="Update Details"
           onPress={() => { this.updateInformation(); }}
         />
-        {/* <IonButton>
+        <IonButton>
           <IonIcon slot="icon-only" size="large" icon={pencil} />
-        </IonButton> */}
+        </IonButton>
       </View>
     );
   }
 }
 
 export default UpdateUserData;
+
+const styles = StyleSheet.create({
+  text: {
+    padding: 5,
+    borderWidth: 2,
+    margin: 5,
+  },
+});

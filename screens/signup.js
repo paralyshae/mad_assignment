@@ -1,10 +1,12 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-console */
-/* eslint-disable no-throw-literal */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
-import { Button, ScrollView, TextInput } from 'react-native';
+import {
+  Button, ScrollView, TextInput, StyleSheet,
+} from 'react-native';
 
 class SignupScreen extends Component {
   constructor(props) {
@@ -37,9 +39,9 @@ class SignupScreen extends Component {
         if (response.status === 201) { // successful
           return response.json();
         } if (response.status === 400) { // bad request
-          throw 'Failed validation';
+          throw new Error('Failed validation');
         } else { // server error 500
-          throw 'Something went wrong';
+          throw new Error('Something went wrong');
         }
       })
     // need to add visual response for user if unsuccessful
@@ -60,26 +62,26 @@ class SignupScreen extends Component {
           placeholder="Enter your first name..." // placeholder within text input box
           onChangeText={(firstName) => this.setState({ firstName })} // assign entered name database
           value={this.state.firstName}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <TextInput
           placeholder="Enter your last name..."
           onChangeText={(lastName) => this.setState({ lastName })}
           value={this.state.lastName}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <TextInput
           placeholder="Enter your email..."
           onChangeText={(email) => this.setState({ email })}
           value={this.state.email}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <TextInput
           placeholder="Enter your password..."
           onChangeText={(password) => this.setState({ password })}
           value={this.state.password}
           secureTextEntry // hide user input
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={styles.text}
         />
         <Button
           title="Create an account"
@@ -92,3 +94,13 @@ class SignupScreen extends Component {
 }
 
 export default SignupScreen;
+
+const styles = StyleSheet.create({
+  text: {
+    padding: 5,
+    fontSize: 14,
+    fontWeight: 'bold',
+    margin: 5,
+    borderWidth: 1,
+  },
+});
