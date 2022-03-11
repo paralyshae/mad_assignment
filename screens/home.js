@@ -1,6 +1,12 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react/no-unused-state */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createBottomTabNavigator, Header } from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import LogoutScreen from './logout';
 import ProfileStack from './profileStack';
@@ -15,8 +21,8 @@ class HomeScreen extends Component {
 
     this.state = {
       isLoading: true,
-      listData: []
-    }
+      listData: [],
+    };
   }
 
   componentDidMount() {
@@ -30,8 +36,8 @@ class HomeScreen extends Component {
   }
 
   checkLoggedIn = async () => {
-    const value = await AsyncStorage.getItem('@session_token');
-    if (value == null) {
+    const token = await AsyncStorage.getItem('@session_token');
+    if (token == null) {
       this.props.navigation.navigate('Login');
     }
   };
@@ -39,18 +45,31 @@ class HomeScreen extends Component {
   render() {
     return (
       <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarLabel: '',
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-        screenOptions={() => ({ // tab icon changes colour when on relevant screen
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'black',
-        })}>
+            if (route.name === 'MyProfile') {
+              iconName = focused ? 'person-outline' : 'person-outline';
+            } else if (route.name === 'Search') {
+              iconName = focused ? 'search-outline' : 'search-outline';
+            } else if (route.name === 'FriendRequests') {
+              iconName = focused ? 'people-outline' : 'people-outline';
+            } else if (route.name === 'Logout') {
+              iconName = focused ? 'log-in-outline' : 'log-in-outline';
+            }
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+        })}
+      >
 
         <Tab.Screen name="MyProfile" component={ProfileStack} options={{ headerShown: false }} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="FriendRequests" component={FriendRequestScreen} />
         <Tab.Screen name="Logout" component={LogoutScreen} />
       </Tab.Navigator>
-    )
+    );
   }
 }
 

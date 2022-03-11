@@ -1,5 +1,14 @@
+/* eslint-disable consistent-return */
+/* eslint-disable no-throw-literal */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-console */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
-import { View, Text, FlatList, ScrollView, Button, ActivityIndicator, StyleSheet } from 'react-native';
+import {
+  View, Text, FlatList, ScrollView, Button, ActivityIndicator, StyleSheet,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class FriendRequestScreen extends Component {
@@ -8,30 +17,30 @@ class FriendRequestScreen extends Component {
 
     this.state = {
       isLoading: true,
-      friendRequestData: []
-    }
+      friendRequestData: [],
+    };
   }
 
   componentDidMount() {
     this.props.navigation.addListener('focus', () => {
       this.getFriendRequestData();
-    })
+    });
     this.getFriendRequestData();
   }
 
   getFriendRequestData = async () => {
-    const value = await AsyncStorage.getItem('@session_token');
-    return fetch("http://localhost:3333/api/1.0.0/friendrequests", {
+    const token = await AsyncStorage.getItem('@session_token');
+    return fetch('http://localhost:3333/api/1.0.0/friendrequests', {
       method: 'get',
       headers: {
-        "X-Authorization": value
-      }
+        'X-Authorization': token,
+      },
     })
       .then((response) => {
         if (response.status === 200) {
-          return response.json()
-        } else if (response.status === 401) { //unauthorised / not logged in
-          this.props.navigation.navigate("Login");
+          return response.json();
+        } if (response.status === 401) { // unauthorised / not logged in
+          this.props.navigation.navigate('Login');
         } else {
           throw 'Something went wrong'; // 500 server error
         }
@@ -39,55 +48,55 @@ class FriendRequestScreen extends Component {
       .then((responseJson) => {
         this.setState({
           isLoading: false,
-          friendRequestData: responseJson
-        })
+          friendRequestData: responseJson,
+        });
       })
       .catch((error) => {
         console.log(error);
-      })
-  }
+      });
+  };
 
   acceptRequest = async (id) => {
-    const value = await AsyncStorage.getItem('@session_token');
-    return fetch("http://localhost:3333/api/1.0.0/friendrequests/" + id, {
+    const token = await AsyncStorage.getItem('@session_token');
+    return fetch(`http://localhost:3333/api/1.0.0/friendrequests/${id}`, {
       method: 'post',
       headers: {
-        'X-Authorization': value
-      }
+        'X-Authorization': token,
+      },
     })
       .then((response) => {
         if (response.status === 200) {
-          console.log("Request Accepted")
+          console.log('Request Accepted');
           this.getFriendRequestData();
         } else {
-          throw "Something has gone wrong"
+          throw 'Something has gone wrong';
         }
       })
       .catch((err) => {
         console.log(err);
-      })
-  }
+      });
+  };
 
   rejectRequest = async (id) => {
-    const value = await AsyncStorage.getItem('@session_token');
-    return fetch("http://localhost:3333/api/1.0.0/friendrequests/" + id, {
+    const token = await AsyncStorage.getItem('@session_token');
+    return fetch(`http://localhost:3333/api/1.0.0/friendrequests/${id}`, {
       method: 'delete',
       headers: {
-        'X-Authorization': value
-      }
+        'X-Authorization': token,
+      },
     })
       .then((response) => {
         if (response.status === 200) {
-          console.log("Request Rejected - I don't want no friends")
+          console.log("Request Rejected - I don't want no friends");
           this.getFriendRequestData();
         } else {
-          throw "Something has gone wrong"
+          throw 'Something has gone wrong';
         }
       })
       .catch((err) => {
         console.log(err);
-      })
-  }
+      });
+  };
 
   render() {
     if (this.state.isLoading) {
@@ -98,34 +107,33 @@ class FriendRequestScreen extends Component {
             color="#00ff00"
           />
         </View>
-      )
-    } else if (this.state.friendRequestData.length == 0) {
-      return <Text> No new friend requests </Text>
-    } else {
-      return (
-        <ScrollView>
-          <FlatList
-            data={this.state.friendRequestData}
-            renderItem={({ item }) => (
-              <View>
-                <Text>{item.first_name}</Text>
-                <Button
-                  title="Accept"
-                  color="green"
-                  onPress={() => this.acceptRequest(item.user_id)}
-                />
-                <Button
-                  title="Reject"
-                  color="red"
-                  onPress={() => this.rejectRequest(item.user_id)}
-                />
-              </View>
-            )}
-            keyExtractor={(item) => item.user_id.toString()}
-          />
-        </ScrollView>
       );
+    } if (this.state.friendRequestData.length === 0) {
+      return <Text> No new friend requests </Text>;
     }
+    return (
+      <ScrollView>
+        <FlatList
+          data={this.state.friendRequestData}
+          renderItem={({ item }) => (
+            <View>
+              <Text>{item.first_name}</Text>
+              <Button
+                title="Accept"
+                color="green"
+                onPress={() => this.acceptRequest(item.user_id)}
+              />
+              <Button
+                title="Reject"
+                color="red"
+                onPress={() => this.rejectRequest(item.user_id)}
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.user_id.toString()}
+        />
+      </ScrollView>
+    );
   }
 }
 
@@ -134,11 +142,11 @@ export default FriendRequestScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   horizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10
-  }
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
 });

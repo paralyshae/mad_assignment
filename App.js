@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,11 +15,12 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ // styling options for stack navigation headers
         headerStyle: {
-          backgroundColor: "#2F4F4F",
+          backgroundColor: '#2F4F4F',
         },
-        headerTintColor: "white",
-        headerBackTitle: "Back",
-      }}>
+        headerTintColor: 'white',
+        headerBackTitle: 'Back',
+      }}
+      >
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
@@ -27,4 +29,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;

@@ -1,6 +1,12 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable no-throw-literal */
+/* eslint-disable no-console */
+/* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
-import { View, Button, TextInput } from 'react-native';
+import { View, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// import { IonButton, IonIcon, IonContent } from '@ionic/react';
+// import { pencil } from 'ionicons/icons';
 
 class UpdateUserData extends Component {
   constructor(props) {
@@ -10,9 +16,9 @@ class UpdateUserData extends Component {
       originalFirstName: '',
       originalLastName: '',
       originalEmail: '',
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: '',
+      lastName: '',
+      email: '',
 
     };
   }
@@ -25,11 +31,11 @@ class UpdateUserData extends Component {
     const id = await AsyncStorage.getItem('@session_id');
     const token = await AsyncStorage.getItem('@session_token');
 
-    return fetch("http://localhost:3333/api/1.0.0/user/" + id, {
+    return fetch(`http://localhost:3333/api/1.0.0/user/${id}`, {
       method: 'get',
       headers: {
         'content-type': 'application/json',
-        "X-Authorization": token
+        'X-Authorization': token,
       },
 
     })
@@ -37,7 +43,7 @@ class UpdateUserData extends Component {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } else if (response.status === 400) { // bad request
+        } if (response.status === 400) { // bad request
           throw 'Bad Request 400';
         } else if (response.status === 401) { // unauthorised
           throw 'Unauthorised 401';
@@ -57,47 +63,45 @@ class UpdateUserData extends Component {
           firstName: responseJson.first_name,
           lastName: responseJson.last_name,
           email: responseJson.email,
-        })
+        });
       })
       .catch((error) => {
         console.log(error);
-      })
-  }
+      });
+  };
 
   updateInformation = async () => {
-
     const id = await AsyncStorage.getItem('@session_id');
     const token = await AsyncStorage.getItem('@session_token');
 
-    let toSend = {};
+    const toSend = {};
 
-    if (this.state.firstName != this.state.originalFirstName) {
-      toSend['first_name'] = this.state.firstName;
+    if (this.state.firstName !== this.state.originalFirstName) {
+      toSend.first_name = this.state.firstName;
     }
 
-    if (this.state.lastName != this.state.originalLastName) {
-      toSend['last_name'] = this.state.lastName;
+    if (this.state.lastName !== this.state.originalLastName) {
+      toSend.last_name = this.state.lastName;
     }
 
-    if (this.state.email != this.state.originalEmail) {
-      toSend['email'] = (this.state.email);
+    if (this.state.email !== this.state.originalEmail) {
+      toSend.email = (this.state.email);
     }
-
 
     console.log(JSON.stringify(toSend));
 
-    return fetch("http://localhost:3333/api/1.0.0/user/" + id, {
+    return fetch(`http://localhost:3333/api/1.0.0/user/${id}`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json',
-        "X-Authorization": token
+        'X-Authorization': token,
       },
-      body: JSON.stringify(toSend)
+      body: JSON.stringify(toSend),
     })
 
       .then((response) => {
         if (response.status === 200) {
-          console.log("Details updated");
+          console.log('Details updated');
         } else if (response.status === 400) { // bad request
           throw 'Bad Request 400';
         } else if (response.status === 401) { // unauthorised
@@ -111,12 +115,12 @@ class UpdateUserData extends Component {
         }
       })
       .then(() => {
-        console.log("Details updated");
+        console.log('Details updated');
       })
       .catch((error) => {
         console.log(error);
-      })
-  }
+      });
+  };
 
   render() {
     return (
@@ -143,10 +147,12 @@ class UpdateUserData extends Component {
           title="Update Details"
           onPress={() => { this.updateInformation(); }}
         />
+        {/* <IonButton>
+          <IonIcon slot="icon-only" size="large" icon={pencil} />
+        </IonButton> */}
       </View>
     );
   }
 }
-
 
 export default UpdateUserData;

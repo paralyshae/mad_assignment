@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable consistent-return */
 /* eslint-disable no-throw-literal */
 /* eslint-disable no-console */
@@ -11,7 +12,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class ProfileScreen extends Component {
+class UserProfileScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -19,7 +20,6 @@ class ProfileScreen extends Component {
       photo: null,
       isLoading: true,
       userData: [],
-      // postData: [],
     };
   }
 
@@ -27,13 +27,16 @@ class ProfileScreen extends Component {
     this.props.navigation.addListener('focus', () => {
       this.getUserData();
       this.getUserProfilePhoto();
+      this.getUserProfile();
+      // let {user_id} = this.props.route.params;
     });
     this.getUserData();
     this.getUserProfilePhoto();
+    this.getUserProfile();
   }
 
   getUserProfilePhoto = async () => {
-    const id = await AsyncStorage.getItem('@session_id');
+    const id = await AsyncStorage.getItem('@userID');
     const token = await AsyncStorage.getItem('@session_token');
     fetch(`http://localhost:3333/api/1.0.0/user/${id}/photo`, {
       method: 'get',
@@ -55,7 +58,7 @@ class ProfileScreen extends Component {
   };
 
   getUserData = async () => {
-    const id = await AsyncStorage.getItem('@session_id');
+    const id = await AsyncStorage.getItem('@userID');
     const token = await AsyncStorage.getItem('@session_token');
     return fetch(`http://localhost:3333/api/1.0.0/user/${id}`, {
       method: 'get',
@@ -85,41 +88,10 @@ class ProfileScreen extends Component {
       });
   };
 
-  // getPosts = async () => {
-  //   const id = await AsyncStorage.getItem('@session_id');
-  //   const token = await AsyncStorage.getItem('@session_token');
-
-  //   return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post`, {
-  //     method: 'get',
-  //     headers: {
-  //       'X-Authorization': token,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (response.status === 200) {
-  //         return response.json();
-  //       } if (response.status === 401) {
-  //         throw 'Unauthorized';
-  //       } else if (response.status === 403) {
-  //         throw 'Can only view the posts of yourself or your friends';
-  //       } else if (response.status === 404) {
-  //         throw 'Not Found';
-  //       } else if (response.status === 500) {
-  //         throw 'Server Error';
-  //       } else {
-  //         throw 'Something went wrong';
-  //       }
-  //     })
-  //     .then((responseJson) => {
-  //       this.setState({
-  //         isLoading: false,
-  //         postData: responseJson,
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  getUserProfile = async () => {
+    await AsyncStorage.setItem(this.user_id);
+    this.props.navigation.navigate('UserProfile');
+  };
 
   render() {
     if (!this.state.isLoading) {
@@ -135,6 +107,7 @@ class ProfileScreen extends Component {
               borderWidth: 2,
             }}
           />
+
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
             {this.state.userData.first_name}
             {' '}
@@ -150,19 +123,9 @@ class ProfileScreen extends Component {
           </Text>
 
           <Button
-            title="Update Info"
-            color="green"
-            onPress={() => this.props.navigation.navigate('Update')}
-          />
-          <Button
             title="View Friends"
             color="green"
             onPress={() => this.props.navigation.navigate('Friends')}
-          />
-          <Button
-            title="Update Photo"
-            color="green"
-            onPress={() => this.props.navigation.navigate('Camera')}
           />
           <Button
             title="Post"
@@ -183,7 +146,7 @@ class ProfileScreen extends Component {
   }
 }
 
-export default ProfileScreen;
+export default UserProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
