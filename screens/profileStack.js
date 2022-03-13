@@ -1,7 +1,6 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable linebreak-style */
 /* eslint-disable import/extensions */
 import React, { Component } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -12,6 +11,7 @@ import CameraScreen from './camera';
 import FriendsScreen from './friends';
 import UpdateUserData from './patch';
 import PostScreen from './post';
+import FeedScreen from './feed';
 
 const ProfStack = createNativeStackNavigator();
 
@@ -24,7 +24,8 @@ class ProfileStack extends Component {
         <ProfStack.Screen name="Camera" component={CameraScreen} />
         <ProfStack.Screen name="Friends" component={FriendsScreen} />
         <ProfStack.Screen name="Update" component={UpdateUserData} />
-        <ProfStack.Screen name="Posts" component={PostScreen} />
+        <ProfStack.Screen name="Post" component={PostScreen} />
+        <ProfStack.Screen name="Feed" component={FeedScreen} />
       </ProfStack.Navigator>
     );
   }

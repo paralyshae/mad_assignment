@@ -1,10 +1,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-throw-literal */
 /* eslint-disable no-console */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable no-use-before-define */
 import React, { Component } from 'react';
 import {
   View, Text, ActivityIndicator, Image, StyleSheet, Button,
@@ -19,7 +16,6 @@ class ProfileScreen extends Component {
       photo: null,
       isLoading: true,
       userData: [],
-      // postData: [],
     };
   }
 
@@ -85,42 +81,6 @@ class ProfileScreen extends Component {
       });
   };
 
-  // getPosts = async () => {
-  //   const id = await AsyncStorage.getItem('@session_id');
-  //   const token = await AsyncStorage.getItem('@session_token');
-
-  //   return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post`, {
-  //     method: 'get',
-  //     headers: {
-  //       'X-Authorization': token,
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (response.status === 200) {
-  //         return response.json();
-  //       } if (response.status === 401) {
-  //         throw 'Unauthorized';
-  //       } else if (response.status === 403) {
-  //         throw 'Can only view the posts of yourself or your friends';
-  //       } else if (response.status === 404) {
-  //         throw 'Not Found';
-  //       } else if (response.status === 500) {
-  //         throw 'Server Error';
-  //       } else {
-  //         throw 'Something went wrong';
-  //       }
-  //     })
-  //     .then((responseJson) => {
-  //       this.setState({
-  //         isLoading: false,
-  //         postData: responseJson,
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-
   render() {
     if (!this.state.isLoading) {
       return (
@@ -129,11 +89,7 @@ class ProfileScreen extends Component {
             source={{
               uri: this.state.photo,
             }}
-            style={{
-              width: 200,
-              height: 200,
-              borderWidth: 2,
-            }}
+            style={styles.photo}
           />
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
             {this.state.userData.first_name}
@@ -167,7 +123,7 @@ class ProfileScreen extends Component {
           <Button
             title="Post"
             color="green"
-            onPress={() => this.props.navigation.navigate('Posts')}
+            onPress={() => this.props.navigation.navigate('Post')}
           />
         </View>
       );
@@ -193,5 +149,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'column',
     padding: 10,
+  },
+  photo: {
+    width: '60%',
+    height: '35%',
+    borderWidth: 2,
+    marginTop: 10,
   },
 });

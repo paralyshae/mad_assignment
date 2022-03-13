@@ -1,8 +1,5 @@
-/* eslint-disable no-use-before-define */
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable react/no-unused-state */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';

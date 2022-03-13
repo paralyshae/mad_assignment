@@ -1,10 +1,6 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/prefer-stateless-function */
-/* eslint-disable linebreak-style */
 import React, { Component } from 'react';
 import {
   ImageBackground, StyleSheet, Text, View, Button,

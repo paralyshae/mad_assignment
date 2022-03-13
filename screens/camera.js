@@ -1,17 +1,16 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-return-assign */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable class-methods-use-this */
-/* eslint-disable no-use-before-define */
 /* eslint-disable no-console */
-/* eslint-disable linebreak-style */
 import React, { Component } from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+/* Camera screen where the user can take a photo to update their profile picture */
 
 class CameraScreen extends Component {
   constructor(props) {

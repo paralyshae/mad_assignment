@@ -1,9 +1,6 @@
-/* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable no-console */
 /* eslint-disable consistent-return */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import {
   View, Text, ScrollView, TextInput, Button, ActivityIndicator, FlatList, StyleSheet,

@@ -1,9 +1,5 @@
 /* eslint-disable import/no-unresolved */
-/* eslint-disable no-use-before-define */
 /* eslint-disable no-return-assign */
-/* eslint-disable no-alert */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
@@ -13,6 +9,9 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+/* LoginScreen - if the user has an account they can log in,
+if not they will be directed to a signup page */
+
 class LoginScreen extends Component {
   constructor(props) {
     super(props);
@@ -21,13 +20,15 @@ class LoginScreen extends Component {
       email: '',
       password: '',
       validation: '',
+      // error: '',
     };
   }
+  // this.setState({ error: '' });
+  // if (this.state.password.length < 6) {
+  //   this.setState({ error: 'Invalid email or password' });
+  //   return null;
+  // };
 
-  // if(this.state.password.length < 6){
-  // alert("Password length must be more than or equal to 6 characters!");
-  // return false;
-  // }
   login = async () => fetch('http://localhost:3333/api/1.0.0/login', {
     method: 'post',
     headers: {
@@ -38,9 +39,7 @@ class LoginScreen extends Component {
     .then((response) => {
       if (response.status === 200) {
         return response.json();
-      } if (response.status === 400) { // invalid details
-        this.setState({ validation: 'Invalid email or password' });
-        alert('Invalid email or password');
+      } if (response.status === 400) {
         throw new Error('Invalid email or password'); // e.g. if you try to submit empty text fields this message will show in console
       } else { // server error 500
         throw new Error('Something went wrong');
@@ -61,12 +60,14 @@ class LoginScreen extends Component {
       <ScrollView>
         <TextInput
           placeholder="Enter your email..." // placeholder in text box
+          placeholderTextColor="#000000"
           onChangeText={(email) => this.setState({ email })}
           value={this.state.email}
           style={styles.text}
         />
         <TextInput
           placeholder="Enter your password..."
+          placeholderTextColor="000000"
           onChangeText={(password) => this.setState({ password })}
           value={this.state.password}
           secureTextEntry // hide user input

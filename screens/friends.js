@@ -1,8 +1,5 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable no-console */
 /* eslint-disable linebreak-style */
 import React, { Component } from 'react';

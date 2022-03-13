@@ -1,10 +1,8 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-console */
 /* eslint-disable camelcase */
 /* eslint-disable consistent-return */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable no-use-before-define */
 import React, { Component } from 'react';
 import {
   View, Text, ActivityIndicator, Image, StyleSheet, Button,
@@ -23,7 +21,7 @@ class UserProfileScreen extends Component {
   }
 
   componentDidMount() {
-    let { profile_id } = this.props.route.params;
+    // const { profile_id } = this.props.route.params;
     this.props.navigation.addListener('focus', () => {
       this.getUserData();
       this.getUserProfilePhoto();
@@ -33,7 +31,6 @@ class UserProfileScreen extends Component {
   }
 
   getUserProfilePhoto = async () => {
-    // const id = await AsyncStorage.getItem('@userID');
     const { profile_id } = this.props.route.params;
     const token = await AsyncStorage.getItem('@session_token');
     return fetch(`http://localhost:3333/api/1.0.0/user/${profile_id}/photo`, {
@@ -57,7 +54,6 @@ class UserProfileScreen extends Component {
 
   getUserData = async () => {
     const { profile_id } = this.props.route.params;
-    // const id = await AsyncStorage.getItem('@userID');
     const token = await AsyncStorage.getItem('@session_token');
     return fetch(`http://localhost:3333/api/1.0.0/user/${profile_id}`, {
       method: 'get',
@@ -87,11 +83,6 @@ class UserProfileScreen extends Component {
       });
   };
 
-  // getUserProfile = async () => {
-  //   await AsyncStorage.setItem(this.user_id);
-  //   this.props.navigation.navigate('UserProfile');
-  // };
-
   render() {
     if (!this.state.isLoading) {
       return (
@@ -100,11 +91,7 @@ class UserProfileScreen extends Component {
             source={{
               uri: this.state.photo,
             }}
-            style={{
-              width: 200,
-              height: 200,
-              borderWidth: 2,
-            }}
+            style={styles.photo}
           />
 
           <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
@@ -160,5 +147,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
+  },
+  photo: {
+    width: '60%',
+    height: '35%',
+    borderWidth: 2,
+    marginTop: 10,
   },
 });

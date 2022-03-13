@@ -1,8 +1,5 @@
-/* eslint-disable no-use-before-define */
 /* eslint-disable react/jsx-filename-extension */
-/* eslint-disable react/prop-types */
 /* eslint-disable no-console */
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import {
   Button, ScrollView, TextInput, StyleSheet,
@@ -44,7 +41,6 @@ class SignupScreen extends Component {
           throw new Error('Something went wrong');
         }
       })
-    // need to add visual response for user if unsuccessful
       .then((responseJson) => {
         console.log('User created with ID: ', responseJson); // printing ID token to console
         this.props.navigation.navigate('Login'); // once account has been created navigate back to login screen
@@ -56,7 +52,7 @@ class SignupScreen extends Component {
 
   render() {
     return (
-    // make app scrollable.
+      // make app scrollable.
       <ScrollView>
         <TextInput
           placeholder="Enter your first name..." // placeholder within text input box

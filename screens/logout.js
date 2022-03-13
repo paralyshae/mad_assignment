@@ -1,6 +1,3 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable no-console */
 import React, { Component } from 'react';
