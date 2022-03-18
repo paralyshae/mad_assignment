@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
 import {
-  StyleSheet, View, Text, FlatList, ActivityIndicator,
+  StyleSheet, View, Text, ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -13,15 +13,16 @@ class SinglePostScreen extends Component {
 
     this.state = {
       isLoading: true,
-      singlePost: [],
+      userPostData: [],
     };
   }
 
   componentDidMount() {
     this.props.navigation.addListener('focus', () => {
-      const { user_id, post_id } = this.props.route.params;
+      const { post_id } = this.props.route.params;
       this.checkLoggedIn();
-      this.getSinglePost(user_id, post_id);
+      this.getPostData(post_id);
+      this.getSinglePost(post_id);
     });
   }
 
@@ -32,7 +33,38 @@ class SinglePostScreen extends Component {
     }
   };
 
-  getSinglePost = async (user_id, post_id) => {
+  // get post from the server
+  getPostData = async (post_id) => {
+    const id = await AsyncStorage.getItem('@session_id');
+    const token = await AsyncStorage.getItem('@session_token');
+    return fetch(
+      `http://localhost:3333/api/1.0.0/user/${id}/post/${post_id}`,
+      {
+        headers: {
+          'X-Authorization': token,
+        },
+      },
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        }
+        throw response.status;
+      })
+      .then((responseJson) => {
+        this.setState({
+          isLoading: false,
+          userPostData: responseJson,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // get single post
+  getSinglePost = async (post_id) => {
+    const user_id = await AsyncStorage.getItem('@user_id');
     const token = await AsyncStorage.getItem('@session_token');
     return fetch(
       `http://localhost:3333/api/1.0.0/user/${user_id}/post/${post_id}`,
@@ -62,7 +94,7 @@ class SinglePostScreen extends Component {
       .then((responseJson) => {
         this.setState({
           isLoading: false,
-          singlePost: responseJson,
+          userPostData: responseJson,
         });
       })
       .catch((error) => {
@@ -83,28 +115,14 @@ class SinglePostScreen extends Component {
     }
     return (
       <ScrollView>
-        <FlatList
-          data={this.state.singlePost}
-          renderItem={({ item }) => (
-            <View>
-              <Text>
-                {' '}
-                {item.text}
-                {' '}
-                {this.author.first_name}
-                {' '}
-                {item.author.last_name}
-                {' '}
-                {/* return the date with subString (start, end) */}
-                {(item.timestamp)}
-                {' '}
-                Likes:
-                {item.numLikes}
-              </Text>
-            </View>
-          )}
-          keyExtractor={(item) => item.post_id.toString()}
-        />
+        <Text style={[styles.post]}>{this.state.userPostData.text}</Text>
+        <View style={[styles.container, styles.horizontal]}>
+          <Text>{this.state.userPostData.author.first_name}</Text>
+          <Text>{this.state.userPostData.author.last_name}</Text>
+          <Text>{this.state.userPostData.timestamp}</Text>
+          Likes:
+          <Text>{this.state.userPostData.numLikes}</Text>
+        </View>
       </ScrollView>
     );
   }
@@ -121,5 +139,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
+  },
+  post: {
+    marginTop: 16,
+    paddingVertical: 8,
+    borderWidth: 4,
+    borderColor: '#20232a',
+    borderRadius: 6,
+    backgroundColor: '#61dafb',
+    color: '#20232a',
+    textAlign: 'center',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
 });

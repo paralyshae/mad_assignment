@@ -136,7 +136,7 @@ class FeedScreen extends Component {
               <Button
                 title="View Post"
                 color="green"
-                onPress={() => this.props.navigation.navigate('SinglePost', { user_id: item.author.user_id, post_id: item.post_id })}
+                onPress={() => this.props.navigation.navigate('SinglePost', { post_id: item.post_id })}
               />
               <Button
                 title="Edit"
