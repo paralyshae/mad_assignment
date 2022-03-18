@@ -3,7 +3,7 @@
 /* eslint-disable consistent-return */
 import React, { Component } from 'react';
 import {
-  View, Text, ActivityIndicator, Image, StyleSheet, Button, TextInput,
+  View, Text, ActivityIndicator, Image, StyleSheet, Button, TextInput, FlatList,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -15,6 +15,7 @@ class UserProfileScreen extends Component {
       photo: null,
       isLoading: true,
       userData: [],
+      userPostData: [],
       text: '',
       error: '',
     };
@@ -24,9 +25,11 @@ class UserProfileScreen extends Component {
     this.props.navigation.addListener('focus', () => {
       this.getUserData();
       this.getUserProfilePhoto();
+      this.getPostList();
     });
     this.getUserData();
     this.getUserProfilePhoto();
+    this.getPostList();
   }
 
   getUserProfilePhoto = async () => {
@@ -83,11 +86,11 @@ class UserProfileScreen extends Component {
   };
 
   createPost = async () => { // add a new post
-    const id = await AsyncStorage.getItem('@session_id');
     const token = await AsyncStorage.getItem('@session_token');
+    const { profile_id } = this.props.route.params;
     if (this.state.text.match(/^([A-z\d\s()!?#])+$/)) { // Character/empty validation
       return fetch(
-        `http://localhost:3333/api/1.0.0/user/${id}/post`,
+        `http://localhost:3333/api/1.0.0/user/${profile_id}/post`,
         {
           method: 'post',
           headers: {
@@ -123,69 +126,108 @@ class UserProfileScreen extends Component {
     return null;
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  // likePost = async (user_id, post_id) => { // like a post
-  //   const token = await AsyncStorage.getItem('@session_token');
-  //   return fetch(
-  //     `http://localhost:3333/api/1.0.0/user/${user_id}/post/${post_id}/like`,
-  //     {
-  //       method: 'post',
-  //       headers: {
-  //         'X-Authorization': token,
-  //       },
-  //     },
-  //   )
-  //     .then((response) => {
-  //       if (response.status === 200) {
-  //         console.log('Post Liked');
-  //       } if (response.status === 401) {
-  //         throw new Error('Unauthorised');
-  //       } else if (response.status === 403) {
-  //         throw new Error('Forbidden - You have already liked this post');
-  //       } else if (response.status === 404) {
-  //         throw new Error('Not Found');
-  //       } else if (response.status === 500) {
-  //         throw new Error('Server Error');
-  //       } else {
-  //         throw new Error('Something went wrong');
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  getPostList = async () => { // get list of posts for a given user
+    const { profile_id } = this.props.route.params;
+    const token = await AsyncStorage.getItem('@session_token');
+    return fetch(
+      `http://localhost:3333/api/1.0.0/user/${profile_id}/post`,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': token,
+        },
+      },
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } if (response.status === 401) {
+          throw new Error('Unauthorised');
+        } else if (response.status === 403) {
+          throw new Error('Can only view the posts of yourself or your friends');
+        } else if (response.status === 404) {
+          throw new Error('Not Found');
+        } else if (response.status === 500) {
+          throw new Error('Server Error');
+        } else {
+          throw new Error('Something went wrong');
+        }
+      })
+      .then((responseJson) => {
+        this.setState({
+          isLoading: false,
+          userPostData: responseJson,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   // eslint-disable-next-line class-methods-use-this
-  // unlikePost = async (user_id, post_id) => { // unlike a post
-  //   const token = await AsyncStorage.getItem('@session_token');
-  //   return fetch(
-  //     `http://localhost:3333/api/1.0.0/user/${user_id}/post/${post_id}/like`,
-  //     {
-  //       method: 'delete',
-  //       headers: {
-  //         'X-Authorization': token,
-  //       },
-  //     },
-  //   )
-  //     .then((response) => {
-  //       if (response.status === 200) {
-  //         console.log('Post Unliked');
-  //       } if (response.status === 401) {
-  //         throw new Error('Unauthorised');
-  //       } else if (response.status === 403) {
-  //         throw new Error('Forbidden - You have not liked this post');
-  //       } else if (response.status === 404) {
-  //         throw new Error('Not Found');
-  //       } else if (response.status === 500) {
-  //         throw new Error('Server Error');
-  //       } else {
-  //         throw new Error('Something went wrong');
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  likePost = async (user_id, post_id) => { // like a post
+    const token = await AsyncStorage.getItem('@session_token');
+    return fetch(
+      `http://localhost:3333/api/1.0.0/user/${user_id}/post/${post_id}/like`,
+      {
+        method: 'post',
+        headers: {
+          'X-Authorization': token,
+        },
+      },
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('Post Liked');
+        } if (response.status === 401) {
+          throw new Error('Unauthorised');
+        } else if (response.status === 403) {
+          throw new Error('Forbidden - You have already liked this post');
+        } else if (response.status === 404) {
+          throw new Error('Not Found');
+        } else if (response.status === 500) {
+          throw new Error('Server Error');
+        } else {
+          throw new Error('Something went wrong');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // eslint-disable-next-line class-methods-use-this
+  unlikePost = async (user_id, post_id) => { // unlike a post
+    const token = await AsyncStorage.getItem('@session_token');
+    return fetch(
+      `http://localhost:3333/api/1.0.0/user/${user_id}/post/${post_id}/like`,
+      {
+        method: 'delete',
+        headers: {
+          'X-Authorization': token,
+        },
+      },
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          console.log('Post Unliked');
+        } if (response.status === 401) {
+          throw new Error('Unauthorised');
+        } else if (response.status === 403) {
+          throw new Error('Forbidden - You have not liked this post');
+        } else if (response.status === 404) {
+          throw new Error('Not Found');
+        } else if (response.status === 500) {
+          throw new Error('Server Error');
+        } else {
+          throw new Error('Something went wrong');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   render() {
     if (!this.state.isLoading) {
@@ -231,7 +273,7 @@ class UserProfileScreen extends Component {
               onChangeText={(text) => this.setState({ text })}
               value={this.state.post}
               multiline
-              numberOfLines={2}
+              numberOfLines={5}
             />
             <Button
               title="Create"
@@ -239,18 +281,49 @@ class UserProfileScreen extends Component {
               onPress={() => this.createPost()}
             />
             <Text>{this.state.error}</Text>
+            <FlatList
+              data={this.state.userPostData}
+              renderItem={({ item }) => (
+                <View>
+                  <Text>
+                    {' '}
+                    {item.text}
+                    {' '}
+                    {item.author.first_name}
+                    {' '}
+                    {item.author.last_name}
+                    {' '}
+                    {(item.timestamp)}
+                    {' '}
+                    Likes:
+                    {item.numLikes}
+                  </Text>
+                  <Button
+                    title="View Post"
+                    color="green"
+                    onPress={() => this.props.navigation.navigate('SinglePost', { user_id: item.author.user_id, post_id: item.post_id })}
+                  />
+                  <Button
+                    title="Like"
+                    color="green"
+                    onPress={() => this.likePost(item.author.user_id, item.post_id)}
+                  />
+                  <Button
+                    title="Unlike"
+                    color="red"
+                    onPress={() => this.unlikePost(item.author.user_id, item.post_id)}
+                  />
+                  <Button
+                    title="DELETE"
+                    color="red"
+                    onPress={() => this.deletePost(item.author.user_id, item.post_id)}
+                  />
+                </View>
+              )}
+              keyExtractor={(item) => item.post_id.toString()}
+            />
           </View>
 
-          {/* <Button
-                title="Like"
-                color="green"
-                onPress={() => this.likePost(item.author.user_id, item.post_id)}
-              />
-              <Button
-                title="Unlike"
-                color="red"
-                onPress={() => this.unlikePost(item.author.user_id, item.post_id)}
-              /> */}
         </View>
       );
     }

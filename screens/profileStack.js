@@ -12,6 +12,7 @@ import UserFriendsScreen from './userFriends';
 import UpdateUserData from './patch';
 import PostScreen from './post';
 import FeedScreen from './feed';
+import SinglePostScreen from './singlePost';
 
 const ProfStack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ class ProfileStack extends Component {
         <ProfStack.Screen name="UserFriends" component={UserFriendsScreen} />
         <ProfStack.Screen name="Update" component={UpdateUserData} />
         <ProfStack.Screen name="Post" component={PostScreen} />
+        <ProfStack.Screen name="SinglePost" component={SinglePostScreen} />
         <ProfStack.Screen name="Feed" component={FeedScreen} />
       </ProfStack.Navigator>
     );

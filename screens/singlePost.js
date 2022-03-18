@@ -2,25 +2,26 @@
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
 import {
-  StyleSheet, View, Text, Button, FlatList, ActivityIndicator,
+  StyleSheet, View, Text, FlatList, ActivityIndicator,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
 
-class FeedScreen extends Component {
+class SinglePostScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
-      userPostData: [],
+      singlePost: [],
     };
   }
 
   componentDidMount() {
     this.props.navigation.addListener('focus', () => {
+      const { user_id, post_id } = this.props.route.params;
       this.checkLoggedIn();
-      this.getPostList();
+      this.getSinglePost(user_id, post_id);
     });
   }
 
@@ -31,11 +32,10 @@ class FeedScreen extends Component {
     }
   };
 
-  getPostList = async () => { // get list of posts for a given user
-    const id = await AsyncStorage.getItem('@session_id');
+  getSinglePost = async (user_id, post_id) => {
     const token = await AsyncStorage.getItem('@session_token');
     return fetch(
-      `http://localhost:3333/api/1.0.0/user/${id}/post`,
+      `http://localhost:3333/api/1.0.0/user/${user_id}/post/${post_id}`,
       {
         method: 'get',
         headers: {
@@ -62,40 +62,8 @@ class FeedScreen extends Component {
       .then((responseJson) => {
         this.setState({
           isLoading: false,
-          userPostData: responseJson,
+          singlePost: responseJson,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  // eslint-disable-next-line class-methods-use-this
-  deletePost = async (user_id, post_id) => { // delete a post
-    const token = await AsyncStorage.getItem('@session_token');
-    return fetch(
-      `http://localhost:3333/api/1.0.0/user/${user_id}/post/${post_id}`,
-      {
-        method: 'delete',
-        headers: {
-          'X-Authorization': token,
-        },
-      },
-    )
-      .then((response) => {
-        if (response.status === 200) {
-          console.log('Post Deleted');
-        } if (response.status === 401) {
-          throw new Error('Unauthorised');
-        } else if (response.status === 403) {
-          throw new Error('Forbidden - You can only delete your own posts');
-        } else if (response.status === 404) {
-          throw new Error('Not Found');
-        } else if (response.status === 500) {
-          throw new Error('Server Error');
-        } else {
-          throw new Error('Something went wrong');
-        }
       })
       .catch((error) => {
         console.log(error);
@@ -116,14 +84,14 @@ class FeedScreen extends Component {
     return (
       <ScrollView>
         <FlatList
-          data={this.state.userPostData}
+          data={this.state.singlePost}
           renderItem={({ item }) => (
             <View>
               <Text>
                 {' '}
                 {item.text}
                 {' '}
-                {item.author.first_name}
+                {this.author.first_name}
                 {' '}
                 {item.author.last_name}
                 {' '}
@@ -133,21 +101,6 @@ class FeedScreen extends Component {
                 Likes:
                 {item.numLikes}
               </Text>
-              <Button
-                title="View Post"
-                color="green"
-                onPress={() => this.props.navigation.navigate('SinglePost', { user_id: item.author.user_id, post_id: item.post_id })}
-              />
-              <Button
-                title="Edit"
-                color="green"
-                onPress={() => this.props.navigation.navigate('Post', { post_id: item.post_id })}
-              />
-              <Button
-                title="DELETE"
-                color="red"
-                onPress={() => this.deletePost(item.author.user_id, item.post_id)}
-              />
             </View>
           )}
           keyExtractor={(item) => item.post_id.toString()}
@@ -157,7 +110,7 @@ class FeedScreen extends Component {
   }
 }
 
-export default FeedScreen;
+export default SinglePostScreen;
 
 const styles = StyleSheet.create({
   container: {
