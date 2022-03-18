@@ -1,8 +1,4 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable no-return-assign */
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity,
@@ -27,6 +23,7 @@ class CameraScreen extends Component {
     this.setState({ hasPermission: status === 'granted' });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   sendToServer = async (data) => {
     const id = await AsyncStorage.getItem('@session_id');
     const token = await AsyncStorage.getItem('@session_token');
@@ -68,6 +65,7 @@ class CameraScreen extends Component {
           <Camera
             style={styles.camera}
             type={this.state.type}
+            // eslint-disable-next-line no-return-assign
             ref={(ref) => this.camera = ref}
           >
             <View style={styles.buttonContainer}>

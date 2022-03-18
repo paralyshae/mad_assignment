@@ -1,10 +1,10 @@
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable no-console */
 import React, { Component } from 'react';
 import {
-  Text, ScrollView, Button, StyleSheet,
+  Text, ScrollView, Button, StyleSheet, ImageBackground,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import image from './background/space.jpg';
 
 class LogoutScreen extends Component {
   logout = async () => { // check that the user is logged in
@@ -33,19 +33,19 @@ class LogoutScreen extends Component {
   render() {
     return ( // render buttons for user to logout of account
       <ScrollView>
-        <Text style={styles.text}>
-          Are you sure?
-        </Text>
-        <Button
-          title="Yes"
-          color="darkblue"
-          onPress={() => this.logout()}
-        />
-        <Button
-          title="No"
-          color="red"
-          onPress={() => this.props.navigation.navigate('Home')}
-        />
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+          <Text style={styles.text}>Are you sure?</Text>
+          <Button
+            title="Yes"
+            color="darkblue"
+            onPress={() => this.logout()}
+          />
+          <Button
+            title="No"
+            color="red"
+            onPress={() => this.props.navigation.navigate('Home')}
+          />
+        </ImageBackground>
       </ScrollView>
     );
   }
@@ -59,5 +59,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     margin: 5,
+    color: 'white',
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });

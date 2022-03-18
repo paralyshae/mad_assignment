@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import {
   View, TextInput, Button, StyleSheet,

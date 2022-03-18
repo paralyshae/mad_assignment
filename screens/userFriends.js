@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable camelcase */
 import React, { Component } from 'react';
 import {
   Text, StyleSheet, ActivityIndicator, View, FlatList, Button,
@@ -6,7 +7,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class FriendsScreen extends Component {
+class UserFriendsScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -17,14 +18,14 @@ class FriendsScreen extends Component {
   }
 
   componentDidMount() {
-    this.getFriends();
+    const { user_id } = this.props.route.params;
+    this.getFriends(user_id);
   }
 
-  getFriends = async () => {
+  getFriends = async (user_id) => {
     console.log('getting data...');
-    const id = await AsyncStorage.getItem('@session_id');
     const token = await AsyncStorage.getItem('@session_token');
-    return fetch(`http://localhost:3333/api/1.0.0/user/${id}/friends`, {
+    return fetch(`http://localhost:3333/api/1.0.0/user/${user_id}/friends`, {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
@@ -106,7 +107,7 @@ class FriendsScreen extends Component {
   }
 }
 
-export default FriendsScreen;
+export default UserFriendsScreen;
 
 const styles = StyleSheet.create({
   container: {

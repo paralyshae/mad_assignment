@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
-/* eslint-disable no-console */
 /* eslint-disable consistent-return */
 import React, { Component } from 'react';
 import {
@@ -49,13 +47,6 @@ class SearchScreen extends Component {
         console.log(error);
       });
   };
-
-  // checkLoggedIn = async () => {
-  //     const value = await AsyncStorage.getItem('@session_token');
-  //     if (value == null) {
-  //         this.props.navigation.navigate('Login');
-  //     }
-  // };
 
   addFriend = async (id) => {
     const token = await AsyncStorage.getItem('@session_token');

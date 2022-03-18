@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-/* eslint-disable react/no-unused-state */
-/* eslint-disable react/jsx-filename-extension */
+
 import React, { Component } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -14,15 +13,6 @@ import SearchScreen from './search';
 const Tab = createBottomTabNavigator();
 
 class HomeScreen extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isLoading: true,
-      listData: [],
-    };
-  }
-
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();

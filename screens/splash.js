@@ -1,12 +1,11 @@
 /* eslint-disable linebreak-style */
-/* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import {
   ImageBackground, StyleSheet, Text, View, Button,
 } from 'react-native';
 
-const image = { uri: 'http://sfwallpaper.com/images/space-background-iphone-5-2.jpg' };
+import image from './background/space.jpg';
 
 class SplashScreen extends Component {
   render() {

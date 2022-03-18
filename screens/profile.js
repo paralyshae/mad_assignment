@@ -1,7 +1,5 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-throw-literal */
-/* eslint-disable no-console */
-/* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import {
   View, Text, ActivityIndicator, Image, StyleSheet, Button,
