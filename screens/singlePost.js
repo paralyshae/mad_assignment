@@ -22,7 +22,7 @@ class SinglePostScreen extends Component {
       const { post_id } = this.props.route.params;
       this.checkLoggedIn();
       this.getPostData(post_id);
-      this.getSinglePost(post_id);
+      this.getSinglePost();
     });
   }
 
@@ -63,7 +63,8 @@ class SinglePostScreen extends Component {
   };
 
   // get single post
-  getSinglePost = async (post_id) => {
+  getSinglePost = async () => {
+    const { post_id } = this.props.route.params;
     const user_id = await AsyncStorage.getItem('@user_id');
     const token = await AsyncStorage.getItem('@session_token');
     return fetch(

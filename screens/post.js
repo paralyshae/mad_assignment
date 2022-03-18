@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
 import {
-  StyleSheet, View, TextInput, Text, TouchableOpacity, Button,
+  StyleSheet, View, TextInput, Text, TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -43,7 +43,7 @@ class PostScreen extends Component {
     const token = await AsyncStorage.getItem('@session_token');
     const { post_id } = this.props.route.params;
     return fetch(
-      `http://localhost:3333/api/1.0.0//user/${id}/post/${post_id}`,
+      `http://localhost:3333/api/1.0.0/user/${id}/post/${post_id}`,
       {
         headers: {
           'X-Authorization': token,
@@ -175,11 +175,6 @@ class PostScreen extends Component {
           </TouchableOpacity>
           <Text>{this.state.error}</Text>
         </View>
-        <Button
-          title="Feed"
-          color="green"
-          onPress={() => this.props.navigation.navigate('Feed')}
-        />
       </ScrollView>
     );
   }

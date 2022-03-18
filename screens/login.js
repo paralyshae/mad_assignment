@@ -21,11 +21,6 @@ class LoginScreen extends Component {
       error: '',
     };
   }
-  // this.setState({ error: '' });
-  // if (this.state.password.length < 6) {
-  //   this.setState({ error: 'Invalid email or password' });
-  //   return null;
-  // };
 
   login = async () => {
     if (this.state.email.length || this.state.password.length === 0) { // Character/empty validation

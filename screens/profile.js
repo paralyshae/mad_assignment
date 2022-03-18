@@ -123,6 +123,11 @@ class ProfileScreen extends Component {
             color="green"
             onPress={() => this.props.navigation.navigate('Post')}
           />
+          <Button
+            title="Feed"
+            color="green"
+            onPress={() => this.props.navigation.navigate('Feed')}
+          />
         </View>
       );
     }

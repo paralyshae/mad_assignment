@@ -298,12 +298,6 @@ class UserProfileScreen extends Component {
                     Likes:
                     {item.numLikes}
                   </Text>
-                  {/* <Button
-                    title="View Post"
-                    color="green"
-                    onPress={() => this.props.navigation.navigate('SinglePost',
-                    { post_id: item.post_id })}
-                  /> */}
                   <Button
                     title="Like"
                     color="green"
@@ -313,6 +307,11 @@ class UserProfileScreen extends Component {
                     title="Unlike"
                     color="red"
                     onPress={() => this.unlikePost(item.author.user_id, item.post_id)}
+                  />
+                  <Button
+                    title="View Post"
+                    color="green"
+                    onPress={() => this.props.navigation.navigate('SinglePost', { post_id: item.post_id })}
                   />
                 </View>
               )}
